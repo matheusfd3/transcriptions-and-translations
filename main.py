@@ -3,6 +3,7 @@ import time
 import numpy
 import queue
 import whisper
+from deep_translator import GoogleTranslator
 
 from modules.microphone_stream.microphone_stream import MicrophoneStream
 
@@ -16,6 +17,15 @@ audio_buffer = queue.Queue(maxsize=MAX_CHUNK_BUFFER)
 
 main_transcript = ""
 last_chunk_transcript = ""
+
+def process_translation(translator) -> None:
+    global main_transcript
+    last_main_transcript_used = ""
+    while True:
+        if main_transcript != last_main_transcript_used:
+            translated = translator.translate(main_transcript)
+            last_main_transcript_used = main_transcript
+        time.sleep(0.1)
 
 def refactoring_main_transcription(main_transcript, last_chunk_transcript, current_chunk_transcript):
     biggest_match = ""
@@ -80,12 +90,16 @@ def process_audio() -> None:
 
 def main() -> None:
     model = whisper.load_model("tiny.en")
+    translator = GoogleTranslator(source='en', target='pt')
 
     audio_thread = threading.Thread(target=process_audio)
     audio_thread.start()
 
     transcription_thread = threading.Thread(target=process_transcription, args=(model, ))
     transcription_thread.start()
+
+    translation_thread = threading.Thread(target=process_translation, args=(translator, ))
+    translation_thread.start()
 
 if __name__ == "__main__":
     main()
