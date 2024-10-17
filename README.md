@@ -8,7 +8,7 @@ Este projeto captura o áudio do microfone em tempo real, transcreve e traduz pa
 ```bash
   pip install -r requirements.txt
 ```
-- Nota: Dependências adicionais podem ser necessárias. Caso apareça algum erro, tente instalá-las manualmente ou consulte a documentação das bibliotecas.
+Nota: Dependências adicionais podem ser necessárias. Caso apareça algum erro, tente instalá-las manualmente ou consulte a documentação das bibliotecas.
 ### PulseAudio (LINUX)
 - Para capturar áudio do sistema (em vez do microfone) no Linux, você pode instalar o PulseAudio:
 ```bash
